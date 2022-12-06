@@ -1,0 +1,140 @@
+<template>
+<div class="slds-box">
+<lightning-layout multiple-rows="true">
+
+      <lightning-layout-item>
+        <c-practice-custom-lookup obj-name="User" label="Transfer From" onlookupselected={handleSelection} onprogressvaluechange={handleProgressValueChange}></c-practice-custom-lookup>
+      </lightning-layout-item> &nbsp;&nbsp;
+
+      <lightning-layout-item>
+        <c-practice-custom-lookup obj-name="User" label="Transfer To" onlookupselectedtransferto={handletransferTo}></c-practice-custom-lookup>
+      </lightning-layout-item>
+      
+</lightning-layout> 
+<br/>
+
+<h2 class="header"><b>Records List</b></h2>
+<div class="slds-box">
+    <lightning-input class="acc" type="checkbox" label="Account"  name="account" onchange={handleAcc} value="Account" disabled={disableCheckbox}></lightning-input>
+    <lightning-input type="checkbox" label="Lead"  name="lead" onchange={handleLeads} value="Lead" disabled={disableCheckbox}></lightning-input>
+    <lightning-input type="checkbox" label="Contact" name="contact" onchange={handleContacts} value="Contact" disabled={disableCheckbox}></lightning-input>
+    <lightning-input type="checkbox" label="Opportunity" name="opportunity" onchange={handleOpportunity} value="Opportunity" disabled={disableCheckbox}></lightning-input>
+    <lightning-input type="checkbox" label="Account Team Member" name="AccountTeamMember" onchange={handleAccountTeamMember} value="AccountTeamMember" disabled={disableCheckbox}></lightning-input>
+    <lightning-input type="checkbox" label="Opportunity Team Member" name="OpportunityTeamMember" onchange={handleOpportunityTeamMember} value="OpportunityTeamMember" disabled={disableCheckbox}></lightning-input>
+   
+  </div>
+  <br/>
+
+  <h2 class="header"><b>Approval Request</b></h2>
+  
+  <!--<div slot="body" class="slds-align_absolute-center slds-form_horizontal">
+    <lightning-combobox  name="Approval Process" label="Approval Request where User is proposed owner of Account" value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+    </lightning-combobox>
+  </div>-->
+  <div class="slds-box">
+    <div class="slds-form">
+
+      <div class="slds-form-element slds-form-element_horizontal">
+        <label class="slds-form-element__label" for="horizontal-input-id-01">Approval Request where User is proposed owner of Account</label>
+        <div class="slds-form-element__control">
+          <lightning-combobox  name="Approval Process"  value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+          </lightning-combobox>
+        </div>
+      </div>
+
+      <div class="slds-form-element slds-form-element_horizontal">
+        <label class="slds-form-element__label" for="horizontal-input-id-02">Approval Request where User is Current owner of Account</label>
+        <div class="slds-form-element__control">
+          <lightning-combobox name="Approval Process" value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+          </lightning-combobox>
+        </div>
+      </div>
+
+      <div class="slds-form-element slds-form-element_horizontal">
+        <label class="slds-form-element__label" for="horizontal-input-id-03">Approval Request where User is the Approver</label>
+        <div class="slds-form-element__control">
+          <lightning-combobox name="Approval Process" label="" value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+          </lightning-combobox>
+        </div>
+      </div>
+
+      <div class="slds-form-element slds-form-element_horizontal">
+        <label class="slds-form-element__label" for="horizontal-input-id-04">Approval Request initiated by User</label>
+        <div class="slds-form-element__control">
+          <lightning-combobox name="Approval Process" value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+          </lightning-combobox>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+
+  
+  <!--<div slot="body" class="slds-align_absolute-center slds-form_horizontal">
+    <lightning-combobox name="Approval Process" label="Approval Request where User is Current owner of Account" value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+    </lightning-combobox>
+  </div>
+  <div slot="body" class="slds-align_absolute-center slds-form_horizontal">
+    <lightning-combobox name="Approval Process" label="Approval Request where User is the Approver" value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+    </lightning-combobox>
+  </div>
+  <div slot="body" class="slds-align_absolute-center slds-form_horizontal">
+    <lightning-combobox name="Approval Process" label="Approval Request initiated by User" value={value} placeholder="Select" options={options} onchange={handleApprovalChange}>
+    </lightning-combobox>
+  </div>-->
+
+<br/>
+
+  <div slot="footer">
+    <lightning-button  class="slds-align_absolute-center" label="Search" variant="brand" onclick={SelectRecords} disabled={disableSearchBtn}>
+    </lightning-button>
+    <div>
+            {message}
+    </div>
+  </div>
+<br/>
+
+<template if:true={boolVal}>
+  <lightning-tabset selected-tab-id={tab} variant="scoped">
+    
+    <template if:true={seachAccount}>
+      <lightning-tab label="Account" value="Account" id="Account">
+          <c-acc-custom-table object-name={account} user-id='{userId}' transfer-to='{transferTo}'></c-acc-custom-table> 
+      </lightning-tab>
+    </template>
+  
+    <template if:true={seachLead}>
+        <lightning-tab label="Lead" value="Lead" id="Lead">
+            <c-lead-custom-table object-name={lead} user-id='{userId}' transfer-to='{transferTo}'></c-lead-custom-table>
+        </lightning-tab>
+    </template>
+
+    <template if:true={seachContact}>
+      <lightning-tab label="Contact" value="Contact" id="Contact">
+          <c-con-custom-table object-name={contact} user-id='{userId}' transfer-to='{transferTo}'></c-con-custom-table>
+      </lightning-tab>
+    </template>
+
+    <template if:true={seachOpportunity}>
+      <lightning-tab label="Opportunity" value="Opportunity" id="Opportunity">
+          <c-opp-custom-table object-name={opportunity} user-id='{userId}' transfer-to='{transferTo}'></c-opp-custom-table>
+      </lightning-tab>
+    </template>
+
+    <template if:true={seachAccountTeamMember}>
+      <lightning-tab label="Account Team Member" value="AccountTeamMember" id="AccountTeamMember">
+          <c-account-team-member-custom-table object-name={AccountTeamMember} user-id='{userId}' transfer-to='{transferTo}'></c-account-team-member-custom-table>
+      </lightning-tab>
+    </template>
+
+    <template if:true={seachOpportunityTeamMember}>
+      <lightning-tab label="Opportunity Team Member" value="OpportunityTeamMember" id="OpportunityTeamMember">
+          <c-opportunity-team-member-custom-table object-name={OpportunityTeamMember} user-id='{userId}' transfer-to='{transferTo}'></c-opportunity-team-member-custom-table>
+      </lightning-tab>
+    </template>
+
+</lightning-tabset>
+</template>
+</div>
+</template>
